@@ -16,12 +16,10 @@
       align-items: center;
       min-height: 100vh;
     }
-
     .container {
       width: 100%;
       max-width: 900px;
     }
-
     .invoice-box {
       background: #fff;
       border-radius: 16px;
@@ -29,61 +27,58 @@
       box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
       color: #333;
     }
-
+    .print-only {
+      display: none;
+    }
+    .controls {
+      margin-top: 2rem;
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    }
     .logo {
       text-align: center;
       margin-bottom: 1.5rem;
     }
-
     .logo h1 {
       color: #5d3b00;
       margin: 0;
       font-size: 2rem;
       font-weight: 600;
     }
-
     .logo p {
       color: #888;
       margin: 0;
       font-size: 1rem;
     }
-
     .header {
       display: flex;
       justify-content: space-between;
       margin-bottom: 2rem;
       padding-bottom: 1rem;
       border-bottom: 2px dashed #eee;
-      flex-wrap: wrap;
     }
-
     .info-column {
-      flex: 1 1 300px;
-      margin-bottom: 1rem;
+      flex: 1;
     }
-
+    .info-column:last-child {
+      text-align: right;
+    }
     .invoice-number {
       font-size: 1.1rem;
       color: #5d3b00;
       font-weight: 500;
     }
-
     .date {
       color: #888;
       margin-top: 0.5rem;
     }
-
-    .table-wrapper {
-      overflow-x: auto;
-    }
-
     .items-table {
       width: 100%;
       border-collapse: collapse;
       margin: 1.5rem 0;
-      min-width: 600px;
     }
-
     .items-table th {
       background-color: #f8f8f8;
       padding: 0.8rem;
@@ -93,26 +88,21 @@
       border-bottom: 1px solid #eee;
       font-size: 0.9rem;
     }
-
     .items-table td {
       padding: 0.8rem;
       border-bottom: 1px solid #eee;
       color: #444;
       text-align: center;
     }
-
     .items-table tr:last-child td {
       border-bottom: none;
     }
-
-    .item-name {
-      text-align: left;
-    }
-
     .price-column, .amount-column {
       text-align: right;
     }
-
+    .item-name {
+      text-align: left;
+    }
     .totals {
       display: flex;
       flex-direction: column;
@@ -121,14 +111,12 @@
       padding-top: 1.5rem;
       border-top: 2px dashed #eee;
     }
-
     .total-row {
       display: flex;
       justify-content: space-between;
       width: 250px;
       margin-bottom: 0.5rem;
     }
-
     .grand-total {
       font-weight: 600;
       font-size: 1.2rem;
@@ -137,7 +125,6 @@
       padding-top: 0.5rem;
       border-top: 1px solid #eee;
     }
-
     .thank-you {
       text-align: center;
       margin-top: 2rem;
@@ -145,29 +132,19 @@
       border-top: 2px dashed #eee;
       color: #888;
     }
-
     .qr-code {
       text-align: center;
       margin-top: 1rem;
     }
-
     .qr-placeholder {
       display: inline-block;
       width: 100px;
       height: 100px;
       background-color: #f0f0f0;
       border-radius: 8px;
+      margin: 0 auto;
     }
-
-    .controls {
-      margin-top: 2rem;
-      background: #fff;
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
-    }
-
-    input, button {
+    input, button, select {
       font-family: 'Prompt', sans-serif;
       font-size: 1rem;
       padding: 0.7rem 1rem;
@@ -176,85 +153,74 @@
       border-radius: 8px;
       box-sizing: border-box;
     }
-
     .form-row {
       display: flex;
-      flex-wrap: wrap;
       gap: 0.5rem;
+      margin-bottom: 0.5rem;
     }
-
     .form-row > * {
       flex: 1;
     }
-
+    .form-row > *:last-child {
+      flex: 0.5;
+    }
     .number-input {
       width: 100%;
       text-align: center;
     }
-
-    .btn {
-      background-color: #6abf69;
-      color: white;
-      border: none;
+    button {
       cursor: pointer;
       font-weight: 500;
       transition: all 0.2s;
     }
-
+    .btn {
+      background-color: #6abf69;
+      color: white;
+      border: none;
+      width: 100%;
+    }
     .btn:hover {
       background-color: #5aaf59;
     }
-
     .btn-secondary {
       background-color: #4c96d7;
+      color: white;
+      border: none;
+      width: 100%;
     }
-
     .btn-secondary:hover {
       background-color: #3c86c7;
     }
-
+    .btn-danger {
+      background-color: #e57373;
+      color: white;
+      border: none;
+    }
+    .btn-danger:hover {
+      background-color: #d56363;
+    }
     .actions {
       display: flex;
       gap: 1rem;
       margin-top: 1rem;
-      flex-wrap: wrap;
     }
-
     .actions button {
-      flex: 1 1 100px;
+      flex: 1;
     }
-
-    @media (max-width: 768px) {
-      .header {
-        flex-direction: column;
-        text-align: left;
-      }
-
-      .totals {
-        align-items: flex-start;
-      }
-
-      .total-row {
-        width: 100%;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .grand-total {
-        font-size: 1rem;
-      }
-    }
-
     @media print {
       body {
         background: white;
         padding: 0;
       }
-
       .controls, .no-print {
         display: none;
       }
-
+      .print-only {
+        display: block;
+      }
+      .container {
+        max-width: 100%;
+      }
       .invoice-box {
         box-shadow: none;
         padding: 0;
