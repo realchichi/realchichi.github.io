@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ใบเสร็จ - เจ๊เมย์มะม่วงทั้งปี</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+      background: #f7f6f4;
+      margin: 0;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+    }
+    .invoice-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+      color: #333;
+    }
+    .print-only {
+      display: none;
+    }
+    .controls {
+      margin-top: 2rem;
+      background: #fff;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .logo h1 {
+      color: #5d3b00;
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .logo p {
+      color: #888;
+      margin: 0;
+      font-size: 1rem;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px dashed #eee;
+    }
+    .info-column {
+      flex: 1;
+    }
+    .info-column:last-child {
+      text-align: right;
+    }
+    .invoice-number {
+      font-size: 1.1rem;
+      color: #5d3b00;
+      font-weight: 500;
+    }
+    .date {
+      color: #888;
+      margin-top: 0.5rem;
+    }
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    .items-table th {
+      background-color: #f8f8f8;
+      padding: 0.8rem;
+      font-weight: 500;
+      text-align: center;
+      color: #666;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9rem;
+    }
+    .items-table td {
+      padding: 0.8rem;
+      border-bottom: 1px solid #eee;
+      color: #444;
+      text-align: center;
+    }
+    .items-table tr:last-child td {
+      border-bottom: none;
+    }
+    .price-column, .amount-column {
+      text-align: right;
+    }
+    .item-name {
+      text-align: left;
+    }
+    .totals {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 2px dashed #eee;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      width: 250px;
+      margin-bottom: 0.5rem;
+    }
+    .grand-total {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #5d3b00;
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid #eee;
+    }
+    .thank-you {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 2px dashed #eee;
+      color: #888;
+    }
+    .qr-code {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .qr-placeholder {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      background-color: #f0f0f0;
+      border-radius: 8px;
+      margin: 0 auto;
+    }
+    input, button, select {
+      font-family: 'Prompt', sans-serif;
+      font-size: 1rem;
+      padding: 0.7rem 1rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    .form-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .form-row > * {
+      flex: 1;
+    }
+    .form-row > *:last-child {
+      flex: 0.5;
+    }
+    .number-input {
+      width: 100%;
+      text-align: center;
+    }
+    button {
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .btn {
+      background-color: #6abf69;
+      color: white;
+      border: none;
+      width: 100%;
+    }
+    .btn:hover {
+      background-color: #5aaf59;
+    }
+    .btn-secondary {
+      background-color: #4c96d7;
+      color: white;
+      border: none;
+      width: 100%;
+    }
+    .btn-secondary:hover {
+      background-color: #3c86c7;
+    }
+    .btn-danger {
+      background-color: #e57373;
+      color: white;
+      border: none;
+    }
+    .btn-danger:hover {
+      background-color: #d56363;
+    }
+    .actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .actions button {
+      flex: 1;
+    }
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .controls, .no-print {
+        display: none;
+      }
+      .print-only {
+        display: block;
+      }
+      .container {
+        max-width: 100%;
+      }
+      .invoice-box {
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ส่วนที่จะถูกบันทึกเป็น PDF หรือรูปภาพ -->
+    <div class="invoice-box" id="invoice-content">
+      <div class="logo">
+        <h1>เจ๊เมย์มะม่วงทั้งปี</h1>
+        <p>ใบเสร็จรับเงิน</p>
+      </div>
+      
+      <div class="header">
+        <div class="info-column">
+          <div><strong>ผู้ขาย:</strong> เจ๊เมย์มะม่วงทั้งปี</div>
+          <div>โทร: 083-269-5365</div>
+          <div>ที่อยู่: พิจิตร 66000</div>
+        </div>
+        <div class="info-column">
+          <div class="invoice-number">กสิกร: <span id="invoice-number">9473666856</span></div>
+          <div class="date">วันที่: <span id="invoice-date">24/04/2025</span></div>
+          <div><strong>ลูกค้า:</strong> <span id="customer-name">คุณ...</span></div>
+        </div>
+      </div>
+      
+      <table class="items-table" id="items-table">
+        <thead>
+          <tr>
+            <th style="width: 18%;">รายการ</th>
+            <th style="width: 12%;">จน.ลัง</th>
+            <th style="width: 12%;">นน./ลัง(กก.)</th>
+            <th style="width: 12%;">นน.รวม(กก.)</th>
+            <th style="width: 12%;">ราคา/กก.(บาท)</th>
+            <th style="width: 12%;" class="amount-column">จน.เงิน(บาท)</th>
+          </tr>
+        </thead>
+        <tbody id="items-body">
+          <!-- รายการสินค้าจะถูกเพิ่มที่นี่ -->
+        </tbody>
+      </table>
+      
+      <div class="totals">
+        <div class="total-row">
+          <span>นน.รวมทั้งสิ้น:</span>
+          <span id="total-weight">0.00</span> กก.
+        </div>
+        <div class="grand-total total-row">
+          <span>ยอดรวมสุทธิ:</span>
+          <span id="grand-total">0.00</span> บาท
+        </div>
+      </div>
+      
+      <div class="thank-you">
+        <p>ขอบคุณที่อุดหนุน</p>
+        <div class="qr-code">
+          <div class="qr-placeholder">
+            <img src="./images/qr-code.jpg" alt="QR Code" style="width: 100px; height: 100px;">
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- ส่วนควบคุมที่จะไม่ถูกบันทึก -->
+    <div class="controls no-print">
+      <div class="form-row">
+        <input type="text" id="input-customer" placeholder="ชื่อลูกค้า">
+      </div>
+      
+      <div class="form-row">
+        <input type="text" id="input-item-name" placeholder="รายการ">
+      </div>
+
+      <div class="form-row">
+        <input type="number" id="input-box-qty" placeholder="จน.ลัง" class="number-input">
+        <input type="number" id="input-weight-per-box" placeholder="นน./ลัง (กก.)" class="number-input">
+        <input type="number" id="input-price-per-kg" placeholder="ราคา/กก." class="number-input">
+        <button class="btn" id="btn-add-item">เพิ่ม</button>
+      </div>
+      
+      <div class="actions">
+        <button class="btn-secondary" id="btn-pdf">บันทึก PDF</button>
+        <button class="btn" id="btn-image">บันทึกเป็นรูป</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // กำหนดวันที่ปัจจุบัน
+      const today = new Date();
+      const date = today.getDate().toString().padStart(2, '0');
+      const month = (today.getMonth() + 1).toString().padStart(2, '0');
+      const year = today.getFullYear();
+      document.getElementById('invoice-date').textContent = `${date}/${month}/${year}`;
+      
+      // กำหนดเลขที่ใบเสร็จ (ตัวอย่าง)
+      // const invoiceNumber = `${year.toString().substring(2)}${month}${date}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+      // document.getElementById('invoice-number').textContent = invoiceNumber;
+      document.getElementById('invoice-number').textContent = '9473666856';
+      
+      // รายการสินค้า
+      const items = [];
+      
+      // อัพเดทชื่อลูกค้า
+      document.getElementById('input-customer').addEventListener('input', function() {
+        document.getElementById('customer-name').textContent = this.value || 'คุณ...';
+      });
+      
+      // เพิ่มรายการสินค้า
+      document.getElementById('btn-add-item').addEventListener('click', addItem);
+      
+      function addItem() {
+        const nameInput = document.getElementById('input-item-name');
+        const boxQtyInput = document.getElementById('input-box-qty');
+        const weightPerBoxInput = document.getElementById('input-weight-per-box');
+        const pricePerKgInput = document.getElementById('input-price-per-kg');
+        
+        const name = nameInput.value.trim();
+        const boxQty = parseFloat(boxQtyInput.value);
+        const weightPerBox = parseFloat(weightPerBoxInput.value);
+        const pricePerKg = parseFloat(pricePerKgInput.value);
+        
+        if (!name || isNaN(boxQty) || isNaN(weightPerBox) || isNaN(pricePerKg)) {
+          alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+          return;
+        }
+        
+        // คำนวณน้ำหนักรวมและราคารวม
+        const totalWeight = boxQty * weightPerBox;
+        const totalAmount = totalWeight * pricePerKg;
+        
+        items.push({ 
+          name, 
+          boxQty, 
+          weightPerBox, 
+          totalWeight, 
+          pricePerKg, 
+          totalAmount 
+        });
+        
+        nameInput.value = '';
+        boxQtyInput.value = '';
+        weightPerBoxInput.value = '';
+        pricePerKgInput.value = '';
+        renderItems();
+      }
+      
+      function renderItems() {
+        const tbody = document.getElementById('items-body');
+        tbody.innerHTML = '';
+        
+        let grandTotal = 0;
+        let totalWeight = 0;
+        
+        items.forEach((item, index) => {
+          grandTotal += item.totalAmount;
+          totalWeight += item.totalWeight;
+          
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td class="item-name">${item.name}</td>
+            <td>${item.boxQty}</td>
+            <td>${item.weightPerBox}</td>
+            <td>${item.totalWeight.toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            <td>${item.pricePerKg.toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            <td class="amount-column">${item.totalAmount.toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+          `;
+          
+          tbody.appendChild(row);
+        });
+        
+        // ถ้าไม่มีรายการให้แสดงแถวว่าง
+        if (items.length === 0) {
+          const emptyRow = document.createElement('tr');
+          emptyRow.innerHTML = '<td colspan="6" style="text-align: center; color: #888;">ยังไม่มีรายการ</td>';
+          tbody.appendChild(emptyRow);
+        }
+        
+        // อัพเดทยอดรวม
+        document.getElementById('total-weight').textContent = totalWeight.toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('grand-total').textContent = grandTotal.toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      }
+      
+      // เริ่มต้นด้วยรายการว่าง
+      renderItems();
+      
+      // บันทึกเป็น PDF
+      document.getElementById('btn-pdf').addEventListener('click', function() {
+        // คลาสที่จะซ่อนก่อนพิมพ์
+        const element = document.getElementById('invoice-content');
+        
+        const opt = {
+          margin: 10,
+          filename: `ใบเสร็จ-${document.getElementById('invoice-number').textContent}.pdf`,
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        
+        html2pdf().from(element).set(opt).save();
+      });
+      
+      // บันทึกเป็นรูปภาพ
+      document.getElementById('btn-image').addEventListener('click', function() {
+        const element = document.getElementById('invoice-content');
+        
+        html2canvas(element, { scale: 2 }).then(canvas => {
+          const link = document.createElement('a');
+          link.href = canvas.toDataURL('image/png');
+          link.download = `ใบเสร็จ_${new Date().toISOString().slice(0,10)}.png`;
+          link.click();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
